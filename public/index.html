@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<header>
+		<h1>Welcome Home</h1>
+		<h3 id="welcomeHeader">
+			<span id="nameSpan"></span>
+			<span id="ageSpan"></span>
+		</h3>	
+	</header>
+
+	<main class="container">
+		<section>
+			<form id="messageForm">
+				<div class="form-group">
+					<label for="">Enter Message</label>
+					<input type="text" id="uname">
+					<input type="text" id="uage">
+				</div>
+				<input type="submit" value="Send Message" id="goBtn">
+			</form>
+		</section>
+	</main>
+	
+	<script>
+		function updatePage(data){
+			var nameSpan = document.getElementById('nameSpan');
+			var ageSpan = document.getElementById('ageSpan');
+
+			nameSpan.innerHTML = data.uname;
+			ageSpan.innerHTML = data.uage;
+		}
+
+		var goBtn = document.getElementById('goBtn');
+		goBtn.addEventListener('click', function(e){
+			e.preventDefault();
+
+			var uname = document.getElementById('uname').value;
+			var uage = document.getElementById('uage').value;
+
+			$.ajax({
+				// 1.서버측에 보내는 데이터
+				type: "POST",
+				url: "/",
+				contentType: "application/JSON",
+				data: JSON.stringify({ 
+					uname: uname,
+					uage: uage
+				}),
+				// 2.서버에서 응답 받은 데이터
+				success: function(data){
+					console.log(JSON.parse(data));
+					updatePage(JSON.parse(data));	// data를 json으로 변환
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>
